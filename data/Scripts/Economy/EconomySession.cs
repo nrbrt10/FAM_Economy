@@ -31,7 +31,6 @@ namespace FAM.Economy
         public static EconomySession Instance; // the only way to access session comp from other classes and the only accepted static field.
 
         public VendorManager vendorManager;
-        public GridManager gridManager;
         public override void LoadData()
         {
             // amogst the earliest execution points, but not everything is available at this point.
@@ -139,7 +138,6 @@ namespace FAM.Economy
             try
             {
                 this.vendorManager = new VendorManager(this.vendorStates);
-                this.gridManager = new GridManager();
             }
             catch
             {
@@ -157,8 +155,9 @@ namespace FAM.Economy
             {
                 IMyCubeGrid grid = entity as IMyCubeGrid;
                 if (grid == null) return;
-
-                //vendorManager.CheckAndAddGrid(grid);
+                
+                
+                this.vendorManager.gridManager.CheckAndAddGrid(grid);
             }
         }
 
@@ -173,12 +172,12 @@ namespace FAM.Economy
                 factionBlocks.Add(vendor.Tag, vendor.BlockData);
             }
 
-            this.gridManager.CheckAndAddGrid(grid, factionBlocks);
+            this.vendorManager.gridManager.CheckAndAddGrid(grid);
         }
 
         private void OnEntityRemoved(IMyEntity entity)
         {
-            this.gridManager.RemoveGrid(entity.EntityId);
+            this.vendorManager.gridManager.RemoveGrid(entity.EntityId);
         }
     }
 }

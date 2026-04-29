@@ -15,18 +15,19 @@
         <Item>Assembler</Item>
         <Item>Store</Item>
         <Item>Storage</Item>
+        <Item>Safezone</Item>
       </Blocks>
       <RestockTick>300</RestockTick>
       <RestockMultiplier>1.0</RestockMultiplier>
       <Procurement>
         <Item>
           <Id>Iron</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>25.0</Quantity>
         </Item>
         <Item>
           <Id>Nickel</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>5.0</Quantity>
         </Item>
       </Procurement>
@@ -46,18 +47,19 @@
         <Item>Assembler</Item>
         <Item>Store</Item>
         <Item>Storage</Item>
+        <Item>Safezone</Item>
       </Blocks>
       <RestockTick>300</RestockTick>
       <RestockMultiplier>1.0</RestockMultiplier>
       <Procurement>
         <Item>
           <Id>Iron</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>1.5</Quantity>
         </Item>
         <Item>
           <Id>Silicon</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>5.2</Quantity>
         </Item>
       </Procurement>
@@ -78,28 +80,29 @@
         <Item>Assembler</Item>
         <Item>Store</Item>
         <Item>Storage</Item>
+        <Item>Safezone</Item>
       </Blocks>
       <RestockTick>300</RestockTick>
       <RestockMultiplier>1.0</RestockMultiplier>
       <Procurement>
         <Item>
           <Id>Iron</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>70.0</Quantity>
         </Item>
         <Item>
           <Id>Cobalt</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>10.0</Quantity>
         </Item>
         <Item>
           <Id>Gold</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>3.0</Quantity>
         </Item>
         <Item>
           <Id>Platinum</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>0.4</Quantity>
         </Item>
       </Procurement>
@@ -120,18 +123,19 @@
         <Item>Assembler</Item>
         <Item>Store</Item>
         <Item>Storage</Item>
+        <Item>Safezone</Item>
       </Blocks>
       <RestockTick>300</RestockTick>
       <RestockMultiplier>1.0</RestockMultiplier>
       <Procurement>
         <Item>
           <Id>Silicon</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>55.0</Quantity>
         </Item>
         <Item>
           <Id>Iron</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>3.0</Quantity>
         </Item>
       </Procurement>
@@ -151,23 +155,24 @@
         <Item>Assembler</Item>
         <Item>Store</Item>
         <Item>Storage</Item>
+        <Item>Safezone</Item>
       </Blocks>
       <RestockTick>300</RestockTick>
       <RestockMultiplier>1.0</RestockMultiplier>
       <Procurement>
         <Item>
           <Id>Iron</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>13.0</Quantity>
         </Item>
         <Item>
           <Id>Nickel</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>15.0</Quantity>
         </Item>
         <Item>
           <Id>Silicon</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>1.0</Quantity>
         </Item>
       </Procurement>
@@ -189,13 +194,14 @@
         <Item>Assembler</Item>
         <Item>Store</Item>
         <Item>Storage</Item>
+        <Item>Safezone</Item>
       </Blocks>
       <RestockTick>300</RestockTick>
       <RestockMultiplier>1.1</RestockMultiplier>
       <Procurement>
         <Item>
           <Id>Iron</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>38.0</Quantity>
         </Item>
       </Procurement>
@@ -216,33 +222,34 @@
         <Item>Assembler</Item>
         <Item>Store</Item>
         <Item>Storage</Item>
+        <Item>Safezone</Item>
       </Blocks>
       <RestockTick>300</RestockTick>
       <RestockMultiplier>1.0</RestockMultiplier>
       <Procurement>
         <Item>
           <Id>Iron</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>25.0</Quantity>
         </Item>
         <Item>
           <Id>Silicon</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>7.0</Quantity>
         </Item>
         <Item>
           <Id>Nickel</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>5.0</Quantity>
         </Item>
         <Item>
           <Id>Stone</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>20.0</Quantity>
         </Item>
         <Item>
           <Id>Silver</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>5.0</Quantity>
         </Item>
       </Procurement>
@@ -263,23 +270,24 @@
         <Item>Assembler</Item>
         <Item>Store</Item>
         <Item>Storage</Item>
+        <Item>Safezone</Item>
       </Blocks>
       <RestockTick>300</RestockTick>
       <RestockMultiplier>1.0</RestockMultiplier>
       <Procurement>
         <Item>
           <Id>Iron</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>26.0</Quantity>
         </Item>
         <Item>
           <Id>Nickel</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>5.0</Quantity>
         </Item>
         <Item>
           <Id>Cobalt</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>3.0</Quantity>
         </Item>
       </Procurement>
@@ -300,28 +308,29 @@
         <Item>Assembler</Item>
         <Item>Store</Item>
         <Item>Storage</Item>
+        <Item>Safezone</Item>
       </Blocks>
       <RestockTick>300</RestockTick>
       <RestockMultiplier>1.0</RestockMultiplier>
       <Procurement>
         <Item>
           <Id>Iron</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>144.5</Quantity>
         </Item>
         <Item>
           <Id>Nickel</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>101.75</Quantity>
         </Item>
         <Item>
           <Id>Silver</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>20.0</Quantity>
         </Item>
         <Item>
           <Id>Silicon</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>12.75</Quantity>
         </Item>
       </Procurement>
@@ -340,18 +349,19 @@
         <Item>Assembler</Item>
         <Item>Store</Item>
         <Item>Storage</Item>
+        <Item>Safezone</Item>
       </Blocks>
       <RestockTick>600</RestockTick>
       <RestockMultiplier>1.0</RestockMultiplier>
       <Procurement>
         <Item>
           <Id>Silicon</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>0.5</Quantity>
         </Item>
         <Item>
           <Id>Magnesium</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>2.0</Quantity>
         </Item>
       </Procurement>
@@ -375,38 +385,39 @@
         <Item>Assembler</Item>
         <Item>Store</Item>
         <Item>Storage</Item>
+        <Item>Safezone</Item>
       </Blocks>
       <RestockTick>300</RestockTick>
       <RestockMultiplier>1.0</RestockMultiplier>
       <Procurement>
         <Item>
           <Id>MealPack_KelpCrisp</Id>
-          <Type>Consumables</Type>
+          <Type>Consumable</Type>
           <Quantity>1.0</Quantity>
         </Item>
         <Item>
           <Id>MealPack_FruitBar</Id>
-          <Type>Consumables</Type>
+          <Type>Consumable</Type>
           <Quantity>1.0</Quantity>
         </Item>
         <Item>
           <Id>MealPack_GardenSlaw</Id>
-          <Type>Consumables</Type>
+          <Type>Consumable</Type>
           <Quantity>1.0</Quantity>
         </Item>
         <Item>
           <Id>MealPack_RedPellets</Id>
-          <Type>Consumables</Type>
+          <Type>Consumable</Type>
           <Quantity>1.0</Quantity>
         </Item>
         <Item>
           <Id>MealPack_Chili</Id>
-          <Type>Consumables</Type>
+          <Type>Consumable</Type>
           <Quantity>1.0</Quantity>
         </Item>
         <Item>
           <Id>MealPack_Ramen</Id>
-          <Type>Consumables</Type>
+          <Type>Consumable</Type>
           <Quantity>1.0</Quantity>
         </Item>
       </Procurement>
@@ -430,38 +441,39 @@
         <Item>Assembler</Item>
         <Item>Store</Item>
         <Item>Storage</Item>
+        <Item>Safezone</Item>
       </Blocks>
       <RestockTick>600</RestockTick>
       <RestockMultiplier>1.0</RestockMultiplier>
       <Procurement>
         <Item>
           <Id>MealPack_Flatbread</Id>
-          <Type>Consumables</Type>
+          <Type>Consumable</Type>
           <Quantity>1.0</Quantity>
         </Item>
         <Item>
           <Id>MealPack_FruitPastry</Id>
-          <Type>Consumables</Type>
+          <Type>Consumable</Type>
           <Quantity>1.0</Quantity>
         </Item>
         <Item>
           <Id>MealPack_Lasagna</Id>
-          <Type>Consumables</Type>
+          <Type>Consumable</Type>
           <Quantity>1.0</Quantity>
         </Item>
         <Item>
           <Id>MealPack_Burrito</Id>
-          <Type>Consumables</Type>
+          <Type>Consumable</Type>
           <Quantity>1.0</Quantity>
         </Item>
         <Item>
           <Id>MealPack_Spaghetti</Id>
-          <Type>Consumables</Type>
+          <Type>Consumable</Type>
           <Quantity>1.0</Quantity>
         </Item>
         <Item>
           <Id>MealPack_SteakDinner</Id>
-          <Type>Consumables</Type>
+          <Type>Consumable</Type>
           <Quantity>1.0</Quantity>
         </Item>
       </Procurement>
@@ -483,28 +495,29 @@
         <Item>H2/O2</Item>
         <Item>Store</Item>
         <Item>Storage</Item>
+        <Item>Safezone</Item>
       </Blocks>
       <RestockTick>600</RestockTick>
       <RestockMultiplier>1.0</RestockMultiplier>
       <Procurement>
         <Item>
           <Id>Iron</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>80.0</Quantity>
         </Item>
         <Item>
           <Id>Silicon</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>10.0</Quantity>
         </Item>
         <Item>
           <Id>Nickel</Id>
-          <Type>Ingots</Type>
+          <Type>Ingot</Type>
           <Quantity>30.0</Quantity>
         </Item>
         <Item>
           <Id>Ice</Id>
-          <Type>Ores</Type>
+          <Type>Ore</Type>
           <Quantity>4.0</Quantity>
         </Item>
       </Procurement>
@@ -738,23 +751,31 @@
   <BlockConfig>
     <Item>
       <Id>Storage</Id>
-      <BlockName>Storage.[%TAG%]</BlockName>
+      <BlockName>[FAM Econ].[%TAG%].Storage</BlockName>
     </Item>
     <Item>
       <Id>Store</Id>
-      <BlockName>Store.[%TAG%]</BlockName>
+      <BlockName>[FAM Econ].[%TAG%].Store</BlockName>
     </Item>
     <Item>
       <Id>Reactor</Id>
-      <BlockName>Reactor.[%TAG%]</BlockName>
+      <BlockName>[FAM Econ].[%TAG%].Reactor</BlockName>
     </Item>
     <Item>
       <Id>Assembler</Id>
-      <BlockName>Assembler.[%TAG%]</BlockName>
+      <BlockName>[FAM Econ].[%TAG%].Assembler</BlockName>
     </Item>
     <Item>
       <Id>H2O2</Id>
-      <BlockName>H2/O2.[%TAG%]</BlockName>
+      <BlockName>[FAM Econ].[%TAG%].H2/O2.</BlockName>
+    </Item>
+    <Item>
+      <Id>Safezone</Id>
+      <BlockName>[FAM Econ].[%TAG%].Safezone</BlockName>
+    </Item>
+    <Item>
+      <Id>Refinery</Id>
+      <BlockName>[FAM Econ].[%TAG%].Refinery</BlockName>
     </Item>
   </BlockConfig>
 </MyModConfig>

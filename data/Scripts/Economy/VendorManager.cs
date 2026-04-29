@@ -15,35 +15,13 @@ using System.Security.Policy;
 using System.Net;
 using VRage.Library.Net;
 using System.Text.RegularExpressions;
-using System.Diagnostics; // required for MyTransparentGeometry/MySimpleObjectDraw to be able to set blend type.
+using System.Diagnostics;
+using Sandbox.Common.ObjectBuilders.Definitions;
+using VRage; // required for MyTransparentGeometry/MySimpleObjectDraw to be able to set blend type.
 
 namespace FAM.Economy
 {
-    public struct VendorBlock
-    {
-        public string Category;
-        public IMyTerminalBlock Block;
-
-        public VendorBlock(string category, IMyTerminalBlock block)
-        {
-            Category = category;
-            Block = block;
-        }
-    }
-    public struct VendorGrid
-    {
-        public string Tag;
-        public IMyCubeGrid Grid;
-        List<VendorBlock> GridBlocks;
-
-        public VendorGrid(string tag, IMyCubeGrid grid, List<VendorBlock> gridBlocks)
-        {
-            Tag = tag;
-            Grid = grid;
-            GridBlocks = gridBlocks;
-        }
-    }
-        public class VendorState
+    public class VendorState
     {
         public string Id;
         public string DisplayName;
@@ -72,24 +50,72 @@ namespace FAM.Economy
     public class VendorManager
     {
         public Dictionary<string, VendorState> Vendors;
+        public GridManager gridManager;
+        public Dictionary<string, Type> _objectCategoryMap = new Dictionary<string, Type>
+        {
+            {"Ingot", typeof(MyObjectBuilder_Ingot)},
+            {"Ore", typeof(MyObjectBuilder_Ore)},
+            {"Component", typeof(MyObjectBuilder_Component)},
+            {"Consumable", typeof(MyObjectBuilder_ConsumableItem)},
+            {"Tools/Ammo", typeof(MyObjectBuilder_PhysicalGunObject)},
+            {"OxygenContainerObject", typeof(MyObjectBuilder_OxygenContainerObject)},
+            {"GasContainerObject", typeof(MyObjectBuilder_GasContainerObject)},
+        };
         
-        public Dictionary<long, VendorGrid> VendorGrids = new Dictionary<long, VendorGrid>();
-        
-
         public VendorManager(Dictionary<string, VendorState> vendors)
         {
             Vendors = vendors;
+            gridManager = new GridManager(Vendors.ToDictionary(v => v.Key, v => v.Value.BlockData));
         }
         public void ManageVendors(int tick)
         {
-            ManageGrids();
+            SupplyVendors(tick);
         }
-        public void ManageGrids()
+
+        public void SupplyVendors(int tick)
         {
-            foreach (var kvp in this.VendorGrids)
+            foreach (var kvp in this.gridManager._trackedGrids)
             {
-                
+                long entityId = kvp.Key;
+                IMyCubeGrid grid = kvp.Value;
+
+                if (grid.Closed) continue;
+
+                string factionTag = this.gridManager._gridToFaction[entityId];
+                if (tick % this.Vendors[factionTag].RestockTick != 0) continue;
+
+                foreach (var typeResourcePair in this.Vendors[factionTag].ProcurementData)
+                {
+                    string type = typeResourcePair.Key;
+                    var resources = typeResourcePair.Value;
+
+                    List<IMyTerminalBlock> cargoContainers = this.gridManager._gridBlocks[entityId]["Storage"];
+                    if (cargoContainers.Count == 0) continue;
+                    foreach (ResourceEntry resource in resources)
+                    {
+                        var typeBuilder = this._objectCategoryMap[type];
+                        MyDefinitionId defId = new MyDefinitionId(typeBuilder, resource.Id);
+                        float volumePerUnit = 0f;
+                        MyPhysicalItemDefinition itemDef;
+                        if (MyDefinitionManager.Static.TryGetPhysicalItemDefinition(defId, out itemDef))
+                        {
+                            volumePerUnit = itemDef.Volume;
+                        }
+
+                        MyFixedPoint volumePerUnitMFP = (MyFixedPoint)volumePerUnit;
+                    }
+                }
             }
+        }
+
+        public void DepositInGrid(List<IMyTerminalBlock> cargoContainers)
+        {
+            foreach (var container in cargoContainers)
+            {
+                IMyInventory inventory = container.GetInventory();
+                MyFixedPoint availableVolume = inventory.MaxVolume - inventory.CurrentVolume;
+            }
+            
         }
     }
 }

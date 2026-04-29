@@ -1,117 +1,110 @@
 using System;
 using System.Collections.Generic;
-using Sandbox.Definitions;
-using Sandbox.Game;
-using Sandbox.Game.Entities;
 using Sandbox.ModAPI;
 using VRage.Game.ModAPI;
-using VRage.ModAPI;
-using VRage.Game;
-using VRage.Game.Components;
-using VRage.Utils;
-using BlendTypeEnum = VRageRender.MyBillboard.BlendTypeEnum;
 using System.Linq;
-using System.Security.Policy;
-using System.Net;
-using VRage.Library.Net;
-using System.Text.RegularExpressions;
-using System.Diagnostics;
-using VRage.Game.VisualScripting.Utils;
-using System.Runtime.InteropServices;
-using Sandbox.Game.GameSystems; // required for MyTransparentGeometry/MySimpleObjectDraw to be able to set blend type.
+using SpaceEngineers.Game.ModAPI;
+
 
 namespace FAM.Economy
 {
-    public struct TrackedBlock
-    {
-        public long GridId;
-        public string FactionTag;
-        public string BlockCategory;
-        public IMyTerminalBlock Block;
-    }
 
     public class GridManager
     {
-        public Dictionary<long, IMyCubeGrid> TrackedGrids;
-        public List<TrackedBlock> ActiveBlocks;
-        public Dictionary<long, int> _blockIdToIndex;
-        public Dictionary<long, List<int>> _gridToIndices;
-        public Dictionary<string, List<int>> _categoryToIndices;
-        public Dictionary<string, List<int>> _factionToIndices;
-        public Dictionary<string, Dictionary<string, string>> _trackedBlockNames;
-
-        public GridManager()
+        private static readonly Dictionary<string, Type> _blockTypeMap = new Dictionary<string, Type>
         {
-            
+            { "Storage",  typeof(IMyCargoContainer) },
+            { "Store",    typeof(IMyStoreBlock) },
+            { "Reactor",  typeof(IMyReactor) },
+            { "Assembler",typeof(IMyAssembler) },
+            { "H2/O2",    typeof(IMyGasGenerator) },
+            { "Safezone", typeof(IMySafeZoneBlock) },
+            { "Refinery", typeof(IMyRefinery) },
+        };
+
+        private static bool IsExpectedBlockType(IMyTerminalBlock block, string category)
+        {
+            switch (category)
+            {
+                case "Storage":  return block is IMyCargoContainer;
+                case "Store":    return block is IMyStoreBlock;
+                case "Reactor":  return block is IMyReactor;
+                case "Assembler":return block is IMyAssembler;
+                case "H2/O2":    return block is IMyGasGenerator;
+                case "Safezone": return block is IMySafeZoneBlock;
+                case "Refinery": return block is IMyRefinery;
+                default:         return false;
+            }
+        }
+        public Dictionary<long, IMyCubeGrid> _trackedGrids;
+        public Dictionary<long, Dictionary<string, List<IMyTerminalBlock>>> _gridBlocks;
+        public Dictionary<string, List<long>> _factionToGrids;
+        public Dictionary<long, string> _gridToFaction;
+        public Dictionary<string, Dictionary<string, string>> _factionBlocks;
+        public GridManager(Dictionary<string, Dictionary<string, string>> factionBlocks)
+        {
+            _factionBlocks = factionBlocks;
+            _factionToGrids = factionBlocks.Keys.ToDictionary(f => f, f => new List<long>());
+            _trackedGrids = new Dictionary<long, IMyCubeGrid>();
+            _gridBlocks = new Dictionary<long, Dictionary<string, List<IMyTerminalBlock>>>();
+            _gridToFaction = new Dictionary<long, string>();
         }
 
-
-        public void CheckAndAddGrid(IMyCubeGrid grid, Dictionary<string, Dictionary<string, string>> factionBlocks)
+        public void CheckAndAddGrid(IMyCubeGrid grid)
         {
             if (grid.BigOwners != null && grid.BigOwners.Count > 0)
             {
                 long primaryOwnerId = grid.BigOwners[0];
-                IMyFaction faction = MyAPIGateway.Session.Factions.TryGetFactionById(primaryOwnerId);
+                IMyFaction faction = MyAPIGateway.Session.Factions.TryGetPlayerFaction(primaryOwnerId);
 
-                if (faction != null && factionBlocks.Keys.ToHashSet().Contains(faction.Tag))
+                if (faction != null && _factionBlocks.ContainsKey(faction.Tag))
                 {
-                    this.TrackedGrids.Add(grid.EntityId, grid);
+                    this._trackedGrids.Add(grid.EntityId, grid);
+                    this._factionToGrids[faction.Tag].Add(grid.EntityId);
+                    this._gridBlocks.Add(grid.EntityId, _blockTypeMap.Keys.ToDictionary(c => c, c => new List<IMyTerminalBlock>()));
+                    this._gridToFaction.Add(grid.EntityId, faction.Tag);
                     
                     var terminalSystem = MyAPIGateway.TerminalActionsHelper.GetTerminalSystemForGrid(grid);
-                    List<IMyTerminalBlock> blocks = new List<IMyTerminalBlock>();
                     
-                    foreach (var blockData in factionBlocks[faction.Tag])
+                    List<IMyTerminalBlock> allBlocks = new List<IMyTerminalBlock>();
+                    terminalSystem.GetBlocksOfType<IMyTerminalBlock>(allBlocks, null);
+                    
+                    foreach (var block in allBlocks)
                     {
-                        terminalSystem.GetBlocksOfType<IMyTerminalBlock>(blocks, null);
+                        if (!block.CustomName.Contains($"[FAM Econ]")) continue;
+                        foreach (var kvp in _blockTypeMap)
+                        {
+                            string expectedName;
+                            if (_factionBlocks[faction.Tag].TryGetValue(kvp.Key, out expectedName) && IsExpectedBlockType(block, kvp.Key) && block.CustomName == expectedName)
+                            {
+                                CheckAndAddBlock(grid.EntityId, kvp.Key, block);
+                                break;
+                            }
+                        }
+
                     }
-                    
+                    allBlocks.Clear();
                 }
             }
         }
 
         public void RemoveGrid(long entityId)
         {
-            List<int> blockIndices;
-            if (this._gridToIndices.TryGetValue(entityId, out blockIndices))
+            string factionTag;
+            if (_gridToFaction.TryGetValue(entityId, out factionTag))
             {
-                if (blockIndices.Count != 0)
-                {
-                    foreach (int index in blockIndices)
-                    {
-                        TrackedBlock block = ActiveBlocks[index];
-                        if (block.GridId != entityId) continue;
-                        this.RemoveBlock(block, index);
-                    }
-                }
-                IMyCubeGrid grid = TrackedGrids[entityId];
-                this.TrackedGrids.Remove(entityId);
+                this._factionToGrids[factionTag].Remove(entityId);
             }
-            
+            this._gridBlocks.Remove(entityId);
+            this._trackedGrids.Remove(entityId);
+            this._gridToFaction.Remove(entityId);
         }
-
-        public void RemoveBlock(TrackedBlock block, int index)
+        public void CheckAndAddBlock(long gridId, string category, IMyTerminalBlock block)
         {
-            _categoryToIndices[block.BlockCategory].Remove(index);
-            _factionToIndices[block.FactionTag].Remove(index);
-            _gridToIndices[block.GridId].Remove(index);
-            _blockIdToIndex.Remove(block.Block.EntityId);
-            ActiveBlocks.RemoveAt(index);
-        }
-
-        public void AddBlock(IMyTerminalBlock block)
-        {
-            IMyFaction faction = MyAPIGateway.Session.Factions.TryGetPlayerFaction(block.OwnerId);
-            if (faction != null)
+            if (this._gridBlocks.ContainsKey(gridId) && this._gridBlocks[gridId].ContainsKey(category))
             {
-                
+                this._gridBlocks[gridId][category].Add(block);
             }
-        }
-
-    
-
-        public void FlushHooks()
-        {
-            
         }
     }
 }

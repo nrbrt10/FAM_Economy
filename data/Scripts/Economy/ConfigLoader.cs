@@ -81,7 +81,7 @@ namespace FAM.Economy
             List<string> types = new List<string>();
             foreach (ResourceEntry entry in config)
             {
-                if (entry.Quantity <= 0) entry.Quantity = 1;   
+                if (entry.Quantity <= 0) continue;   
                 entry.active = true;
             }
         }
