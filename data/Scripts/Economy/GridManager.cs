@@ -11,31 +11,6 @@ namespace FAM.Economy
 
     public class GridManager
     {
-        private static readonly Dictionary<string, Type> _blockTypeMap = new Dictionary<string, Type>
-        {
-            { "Storage",  typeof(IMyCargoContainer) },
-            { "Store",    typeof(IMyStoreBlock) },
-            { "Reactor",  typeof(IMyReactor) },
-            { "Assembler",typeof(IMyAssembler) },
-            { "H2/O2",    typeof(IMyGasGenerator) },
-            { "Safezone", typeof(IMySafeZoneBlock) },
-            { "Refinery", typeof(IMyRefinery) },
-        };
-
-        private static bool IsExpectedBlockType(IMyTerminalBlock block, string category)
-        {
-            switch (category)
-            {
-                case "Storage":  return block is IMyCargoContainer;
-                case "Store":    return block is IMyStoreBlock;
-                case "Reactor":  return block is IMyReactor;
-                case "Assembler":return block is IMyAssembler;
-                case "H2/O2":    return block is IMyGasGenerator;
-                case "Safezone": return block is IMySafeZoneBlock;
-                case "Refinery": return block is IMyRefinery;
-                default:         return false;
-            }
-        }
         public Dictionary<long, IMyCubeGrid> _trackedGrids;
         public Dictionary<long, Dictionary<string, List<IMyTerminalBlock>>> _gridBlocks;
         public Dictionary<string, List<long>> _factionToGrids;
@@ -61,7 +36,7 @@ namespace FAM.Economy
                 {
                     this._trackedGrids.Add(grid.EntityId, grid);
                     this._factionToGrids[faction.Tag].Add(grid.EntityId);
-                    this._gridBlocks.Add(grid.EntityId, _blockTypeMap.Keys.ToDictionary(c => c, c => new List<IMyTerminalBlock>()));
+                    this._gridBlocks.Add(grid.EntityId, BlockRegistry._blockTypeMap.Keys.ToDictionary(c => c, c => new List<IMyTerminalBlock>()));
                     this._gridToFaction.Add(grid.EntityId, faction.Tag);
                     
                     var terminalSystem = MyAPIGateway.TerminalActionsHelper.GetTerminalSystemForGrid(grid);
@@ -71,11 +46,10 @@ namespace FAM.Economy
                     
                     foreach (var block in allBlocks)
                     {
-                        if (!block.CustomName.Contains($"[FAM Econ]")) continue;
-                        foreach (var kvp in _blockTypeMap)
+                        foreach (var kvp in BlockRegistry._blockTypeMap)
                         {
                             string expectedName;
-                            if (_factionBlocks[faction.Tag].TryGetValue(kvp.Key, out expectedName) && IsExpectedBlockType(block, kvp.Key) && block.CustomName == expectedName)
+                            if (_factionBlocks[faction.Tag].TryGetValue(kvp.Key, out expectedName) && BlockRegistry.IsExpectedBlockType(block, kvp.Key) && block.CustomName == expectedName)
                             {
                                 CheckAndAddBlock(grid.EntityId, kvp.Key, block);
                                 break;

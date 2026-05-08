@@ -155,8 +155,6 @@ namespace FAM.Economy
             {
                 IMyCubeGrid grid = entity as IMyCubeGrid;
                 if (grid == null) return;
-                
-                
                 this.vendorManager.gridManager.CheckAndAddGrid(grid);
             }
         }

@@ -17,7 +17,8 @@ using VRage.Library.Net;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using Sandbox.Common.ObjectBuilders.Definitions;
-using VRage; // required for MyTransparentGeometry/MySimpleObjectDraw to be able to set blend type.
+using VRage;
+using VRage.ObjectBuilders; // required for MyTransparentGeometry/MySimpleObjectDraw to be able to set blend type.
 
 namespace FAM.Economy
 {
@@ -47,20 +48,10 @@ namespace FAM.Economy
             ProcurementData = procurement;
         }
     }
-    public class VendorManager
+    public  class VendorManager
     {
         public Dictionary<string, VendorState> Vendors;
         public GridManager gridManager;
-        public Dictionary<string, Type> _objectCategoryMap = new Dictionary<string, Type>
-        {
-            {"Ingot", typeof(MyObjectBuilder_Ingot)},
-            {"Ore", typeof(MyObjectBuilder_Ore)},
-            {"Component", typeof(MyObjectBuilder_Component)},
-            {"Consumable", typeof(MyObjectBuilder_ConsumableItem)},
-            {"Tools/Ammo", typeof(MyObjectBuilder_PhysicalGunObject)},
-            {"OxygenContainerObject", typeof(MyObjectBuilder_OxygenContainerObject)},
-            {"GasContainerObject", typeof(MyObjectBuilder_GasContainerObject)},
-        };
         
         public VendorManager(Dictionary<string, VendorState> vendors)
         {
@@ -83,17 +74,17 @@ namespace FAM.Economy
 
                 string factionTag = this.gridManager._gridToFaction[entityId];
                 if (tick % this.Vendors[factionTag].RestockTick != 0) continue;
+                List<IMyTerminalBlock> cargoContainers = this.gridManager._gridBlocks[entityId]["Storage"];
+                if (cargoContainers.Count == 0) continue;
 
                 foreach (var typeResourcePair in this.Vendors[factionTag].ProcurementData)
                 {
                     string type = typeResourcePair.Key;
                     var resources = typeResourcePair.Value;
 
-                    List<IMyTerminalBlock> cargoContainers = this.gridManager._gridBlocks[entityId]["Storage"];
-                    if (cargoContainers.Count == 0) continue;
                     foreach (ResourceEntry resource in resources)
                     {
-                        var typeBuilder = this._objectCategoryMap[type];
+                        var typeBuilder = ObjectBuilderRegistry._objectCategoryMap[type];
                         MyDefinitionId defId = new MyDefinitionId(typeBuilder, resource.Id);
                         float volumePerUnit = 0f;
                         MyPhysicalItemDefinition itemDef;
@@ -102,18 +93,34 @@ namespace FAM.Economy
                             volumePerUnit = itemDef.Volume;
                         }
 
-                        MyFixedPoint volumePerUnitMFP = (MyFixedPoint)volumePerUnit;
+                        this.DepositItems(cargoContainers, defId, (MyFixedPoint)resource.Quantity, (MyFixedPoint)volumePerUnit);
                     }
                 }
             }
         }
 
-        public void DepositInGrid(List<IMyTerminalBlock> cargoContainers)
+        public void DepositItems(List<IMyTerminalBlock> cargoContainers, MyDefinitionId defId, MyFixedPoint amount, MyFixedPoint volumePerUnit)
         {
+            MyObjectBuilder_PhysicalObject builder = MyObjectBuilderSerializer.CreateNewObject(defId) as MyObjectBuilder_PhysicalObject;
+            if (builder == null)
+            {
+                MyLog.Default.WriteLine($"FAM Economy: Failed to create builder for {defId}.");
+                return;
+            }
+
+            MyFixedPoint remaining = amount;
+
             foreach (var container in cargoContainers)
             {
                 IMyInventory inventory = container.GetInventory();
                 MyFixedPoint availableVolume = inventory.MaxVolume - inventory.CurrentVolume;
+                MyFixedPoint unitsThatFit = (MyFixedPoint)((float)availableVolume / (float)volumePerUnit);
+                MyFixedPoint toDeposit = MyFixedPoint.Min(remaining, unitsThatFit);
+                if (toDeposit > 0)
+                {
+                    inventory.AddItems(toDeposit, builder);
+                    remaining -= toDeposit;
+                }
             }
             
         }
