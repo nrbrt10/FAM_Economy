@@ -28,6 +28,7 @@ namespace FAM.Economy
     {   
         private int _tickCount = 0;
         private bool _failed = false;
+        public MyModConfig _config;
         public static EconomySession Instance; // the only way to access session comp from other classes and the only accepted static field.
 
         public VendorManager vendorManager;
@@ -43,7 +44,7 @@ namespace FAM.Economy
             // MyVisualScriptLogicProvider. - mainly designed for VST but has its uses, use as a last resort.
             // System.Diagnostics.Stopwatch - for measuring code execution time.
             // ...and many more things, ask in #programming-modding in keen's discord for what you want to do to be pointed at the available things to use.
-            LoadConfig();
+            _config = LoadConfig();
             
             Instance = this;
         }
@@ -137,7 +138,7 @@ namespace FAM.Economy
         {
             try
             {
-                this.vendorManager = new VendorManager(this.vendorStates);
+                this.vendorManager = new VendorManager(_config.VendorConfig, _config.BlockConfig, _config.ProductsConfig);
             }
             catch
             {

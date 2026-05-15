@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace FAM.Economy
 {
-    public class ResourceEntry
+    public class ResourceDTO
     {
         public string Id;
         public string Type;
@@ -23,7 +23,7 @@ namespace FAM.Economy
         public List<string> Blocks = new List<string>();
         public int RestockTick;
         public float RestockMultiplier;
-        public List<ResourceEntry> Procurement = new List<ResourceEntry>();
+        public List<ResourceDTO> Procurement = new List<ResourceDTO>();
         public bool BuyBack;
         public bool active = false;
     }
